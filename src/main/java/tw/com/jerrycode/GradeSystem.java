@@ -11,21 +11,25 @@ public class GradeSystem extends JFrame implements ActionListener {
     private JTextField mathText;
     private JTextField englishText;
     private JButton addBtn;
-    private JTextArea outputAtea;
+    private JTextArea outputArea;
     private JButton saveBtn;
+    private JButton loadBtn;
+    private JButton clearBtn;
+    private JCheckBox appendCbx;
 
     private Font font1;
     private Font font2;
     private Font font3;
+    private Font font4;
 
     private final int WIDTH = 600;
-    private final int HEIGHT = 600;
+    private final int HEIGHT = 550;
 
     GradeSystem() {
-
         font1 = new Font(Font.SANS_SERIF, Font.PLAIN, 16);
         font2 = new Font(Font.MONOSPACED, Font.PLAIN, 24);
         font3 = new Font(Font.MONOSPACED, Font.PLAIN, 28);
+        font4 = new Font(Font.MONOSPACED, Font.BOLD, 20);
 
         // 畫面置中
         Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
@@ -42,35 +46,90 @@ public class GradeSystem extends JFrame implements ActionListener {
         setLayout(null);
         // 左邊樣式布局
         initLeftPanel();
+        // 右邊樣式布局
+        initRightPanel();
     }
 
-    void initLeftPanel() {
+    private void initLeftPanel() {
         JPanel panel = new JPanel();
         panel.setBounds(10, 10, (int) (WIDTH * 0.4), HEIGHT - 60);
-        // panel.setBackground(Color.ORANGE);
-        panel.setLayout(new FlowLayout());
+        panel.setLayout(new FlowLayout(FlowLayout.CENTER));
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
                 "輸入"));
 
         add(panel);
 
         // 增加Label
-        panel.add(new JLabel("姓名"));
+        panel.add(getLabel("姓名", font4));
         nameText = getTextField("請輸入姓名", 14, font2);
         panel.add(nameText);
 
-        panel.add(new JLabel("國文"));
+        panel.add(getLabel("國文", font4));
+
         chineseText = getTextField("請輸入國文", 14, font2);
         panel.add(chineseText);
 
-        panel.add(new JLabel("英文"));
+        panel.add(getLabel("英文", font4));
         englishText = getTextField("請輸入英文", 14, font2);
         panel.add(englishText);
 
-        panel.add(new JLabel("數學"));
+        panel.add(getLabel("數學", font4));
         mathText = getTextField("請輸入數學", 14, font2);
         panel.add(mathText);
 
+        addBtn = new JButton("增加");
+        addBtn.setFont(font3);
+        addBtn.addActionListener(this);
+        panel.add(addBtn);
+    }
+
+    private void initRightPanel() {
+        JPanel panel = new JPanel();
+        panel.setBounds(10 + (int) (WIDTH * 0.4), 10, (int) (WIDTH * 0.55), HEIGHT - 120);
+        panel.setLayout(null);
+        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.black),
+                "資料"));
+
+        add(panel);
+
+        outputArea = new JTextArea();
+        outputArea.setBounds(10, 20, (int) (WIDTH * 0.52), HEIGHT - 150);
+        outputArea.setFont(font3);
+        panel.add(outputArea);
+
+        panel = new JPanel();
+        panel.setBounds(10 + (int) (WIDTH * 0.4), HEIGHT - 100, (int) (WIDTH * 0.55), 80);
+        panel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        add(panel);
+
+        saveBtn = new JButton("儲存");
+        saveBtn.setFont(font2);
+        saveBtn.addActionListener(this);
+        panel.add(saveBtn);
+
+        loadBtn = new JButton("讀取");
+        loadBtn.setFont(font2);
+        loadBtn.addActionListener(this);
+        panel.add(loadBtn);
+
+        clearBtn = new JButton("清除");
+        clearBtn.setFont(font2);
+        clearBtn.addActionListener(this);
+        panel.add(clearBtn);
+
+        appendCbx = new JCheckBox("附加");
+        appendCbx.setFont(font1);
+        appendCbx.setSelected(true);
+        panel.add(appendCbx);
+    }
+
+    private JLabel getLabel(String text, Font font) {
+        JLabel label = new JLabel(text);
+        if (font != null) {
+            label.setFont(font);
+        }
+
+        return label;
     }
 
     private JTextField getTextField(String toolTipText, int columns, Font font) {
@@ -89,7 +148,9 @@ public class GradeSystem extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        if (e.getSource() == addBtn) {
+            System.out.println("增加資料!");
+        }
     }
 
 }
