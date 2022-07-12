@@ -18,5 +18,13 @@ public final class App {
         GradeSystem system = new GradeSystem();
 
         system.run(true);
+
+        try {
+            String chinese = "56.5";
+            double score = Double.valueOf(chinese);
+            System.out.println(score);
+        } catch (java.lang.NumberFormatException e) {
+            System.out.println(e);
+        }
     }
 }

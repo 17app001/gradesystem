@@ -5,7 +5,7 @@
 - JAVA SDK jdk-18.0.1.1
 - MAVEN 4.0.4
 
-> MarkerDown
+> MarkDown
 
 - https://www.mdeditor.tw/
 
@@ -18,10 +18,10 @@
   - TextArea
   - ScrollPane
 - 下方功能按鈕
+  - 新增/讀取/清除/核取按鈕
 
 > 輸入功能測試
 
-- 輸入錯誤測試
 - 輸入為空測試
 - 輸入不合法數字
 

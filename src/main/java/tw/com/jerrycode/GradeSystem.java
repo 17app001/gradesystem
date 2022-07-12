@@ -142,6 +142,16 @@ public class GradeSystem extends JFrame implements ActionListener {
         return field;
     }
 
+    // 檢查是否是數值
+    private boolean isNumber(String text) {
+        try {
+            Double.valueOf(text);
+            return true;
+        } catch (java.lang.NumberFormatException e) {
+            return false;
+        }
+    }
+
     public void run(boolean visible) {
         setVisible(visible);
     }
@@ -150,6 +160,28 @@ public class GradeSystem extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == addBtn) {
             System.out.println("增加資料!");
+
+            JTextField[] fields = { nameText, chineseText, englishText, mathText };
+            boolean add = true;
+            // 檢查輸入是否為空
+            for (JTextField field : fields) {
+                if (field.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "資料輸入不能為空!");
+                    add = false;
+                    break;
+                }
+            }
+
+            // 檢查輸入數值是否正確
+            if (add) {
+                for (int i = 1; i < fields.length; i++) {
+                    if (!isNumber(fields[i].getText())) {
+                        JOptionPane.showMessageDialog(null, "分數輸入有錯!");
+                        add = false;
+                        break;
+                    }
+                }
+            }
         }
     }
 
