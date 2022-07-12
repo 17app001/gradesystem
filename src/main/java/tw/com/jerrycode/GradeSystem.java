@@ -62,19 +62,22 @@ public class GradeSystem extends JFrame implements ActionListener {
         // 增加Label
         panel.add(getLabel("姓名", font4));
         nameText = getTextField("請輸入姓名", 14, font2);
+        nameText.setText("Jerry");
         panel.add(nameText);
 
         panel.add(getLabel("國文", font4));
-
         chineseText = getTextField("請輸入國文", 14, font2);
+        chineseText.setText("99.9");
         panel.add(chineseText);
 
         panel.add(getLabel("英文", font4));
         englishText = getTextField("請輸入英文", 14, font2);
+        englishText.setText("69.9");
         panel.add(englishText);
 
         panel.add(getLabel("數學", font4));
         mathText = getTextField("請輸入數學", 14, font2);
+        mathText.setText("100");
         panel.add(mathText);
 
         addBtn = new JButton("增加");
@@ -94,7 +97,7 @@ public class GradeSystem extends JFrame implements ActionListener {
 
         outputArea = new JTextArea();
         outputArea.setBounds(10, 20, (int) (WIDTH * 0.52), HEIGHT - 150);
-        outputArea.setFont(font3);
+        outputArea.setFont(font4);
         panel.add(outputArea);
 
         panel = new JPanel();
@@ -158,9 +161,17 @@ public class GradeSystem extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == clearBtn) {
+            int dialogResult = JOptionPane.showConfirmDialog(null, "確定清除所有內容?",
+                    "警告", JOptionPane.YES_NO_OPTION);
+            if (dialogResult == JOptionPane.YES_OPTION) {
+                outputArea.setText("");
+            }
+            return;
+        }
+
         if (e.getSource() == addBtn) {
             JTextField[] fields = { nameText, chineseText, englishText, mathText };
-            // boolean add = true;
             // 檢查輸入是否為空
             for (JTextField field : fields) {
                 if (field.getText().equals("")) {
@@ -173,7 +184,6 @@ public class GradeSystem extends JFrame implements ActionListener {
             for (int i = 1; i < fields.length; i++) {
                 if (!isNumber(fields[i].getText())) {
                     JOptionPane.showMessageDialog(null, "分數輸入有錯!");
-                    // add = false;
                     return;
                 }
             }
@@ -188,6 +198,8 @@ public class GradeSystem extends JFrame implements ActionListener {
             sb.append("\n");
             outputArea.setText(outputArea.getText() + sb.toString());
         }
+
+        return;
     }
 
 }
