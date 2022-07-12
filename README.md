@@ -47,6 +47,14 @@
 
 > 讀取功能
 
+    - 讀取使用OpenFileDialog
+        - 取代目前fileName
+        - 資料讀取後更新outputArea
+
+    - 顯示目前編修檔案
+
+    - 儲存也使用fileName
+
 > 其他優化
 
     - 輸出Excel編碼格式(ANSI=>BIG5)

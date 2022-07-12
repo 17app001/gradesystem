@@ -31,7 +31,7 @@ public class GradeSystem extends JFrame implements ActionListener {
     private String fileName;
 
     GradeSystem() {
-        fileName = "student.csv";
+        fileName = "resource/student.csv";
         font1 = new Font(Font.SANS_SERIF, Font.PLAIN, 16);
         font2 = new Font(Font.MONOSPACED, Font.PLAIN, 24);
         font3 = new Font(Font.MONOSPACED, Font.PLAIN, 28);
@@ -161,6 +161,21 @@ public class GradeSystem extends JFrame implements ActionListener {
         }
     }
 
+    private void load() {
+        FileDialog fd = new FileDialog(this, "選擇檔案", FileDialog.LOAD);
+        fd.setDirectory("");
+        fd.setFile("*.csv");
+        fd.setVisible(true);
+
+        String filename = fd.getFile();
+        if (filename == null) {
+            JOptionPane.showMessageDialog(null, "讀取檔案失敗!");
+        } else {
+            String path = fd.getDirectory() + fd.getFile();
+
+        }
+    }
+
     // 儲存檔案
     private void save(String filename, String text, boolean append) {
         FileWriter fileWriter = null;
@@ -196,6 +211,12 @@ public class GradeSystem extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == loadBtn) {
+            load();
+
+            return;
+        }
+
         if (e.getSource() == saveBtn) {
             String text = outputArea.getText();
             if (text.equals("")) {
