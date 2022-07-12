@@ -159,29 +159,34 @@ public class GradeSystem extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == addBtn) {
-            System.out.println("增加資料!");
-
             JTextField[] fields = { nameText, chineseText, englishText, mathText };
-            boolean add = true;
+            // boolean add = true;
             // 檢查輸入是否為空
             for (JTextField field : fields) {
                 if (field.getText().equals("")) {
                     JOptionPane.showMessageDialog(null, "資料輸入不能為空!");
-                    add = false;
-                    break;
+                    return;
                 }
             }
 
             // 檢查輸入數值是否正確
-            if (add) {
-                for (int i = 1; i < fields.length; i++) {
-                    if (!isNumber(fields[i].getText())) {
-                        JOptionPane.showMessageDialog(null, "分數輸入有錯!");
-                        add = false;
-                        break;
-                    }
+            for (int i = 1; i < fields.length; i++) {
+                if (!isNumber(fields[i].getText())) {
+                    JOptionPane.showMessageDialog(null, "分數輸入有錯!");
+                    // add = false;
+                    return;
                 }
             }
+
+            // 輸出到outputArea
+            StringBuilder sb = new StringBuilder();
+            for (JTextField field : fields) {
+                sb.append(field.getText()).append(",");
+            }
+            // 移除最後逗點並加上換行符號
+            sb.setLength(sb.length() - 1);
+            sb.append("\n");
+            outputArea.setText(outputArea.getText() + sb.toString());
         }
     }
 
