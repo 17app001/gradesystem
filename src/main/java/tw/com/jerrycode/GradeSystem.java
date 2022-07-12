@@ -3,6 +3,7 @@ package tw.com.jerrycode;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -163,9 +164,16 @@ public class GradeSystem extends JFrame implements ActionListener {
     // 儲存檔案
     private void save(String filename, String text, boolean append) {
         FileWriter fileWriter = null;
+        // 新增檔案偵測
+        File file = new File(filename);
+        boolean exists = file.exists();
 
         try {
             fileWriter = new FileWriter(filename, append);
+            // 不附加狀態寫入Header or 檔案不存在
+            if (!append || !exists) {
+                fileWriter.write("姓名,國文,英文,數學\n");
+            }
             fileWriter.write(text);
             JOptionPane.showMessageDialog(null, "寫入資料成功!");
         } catch (IOException e) {
@@ -195,7 +203,7 @@ public class GradeSystem extends JFrame implements ActionListener {
                 return;
             }
 
-            save(fileName, text, true);
+            save(fileName, text, appendCbx.isSelected());
 
             return;
         }
