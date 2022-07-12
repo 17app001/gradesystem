@@ -3,7 +3,10 @@ package tw.com.jerrycode;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -27,11 +30,12 @@ public class GradeSystem extends JFrame implements ActionListener {
 
     private final int WIDTH = 600;
     private final int HEIGHT = 550;
+    private final String TITLE = "學生成績輸入系統";
 
     private String fileName;
 
     GradeSystem() {
-        fileName = "resource/student.csv";
+        // fileName = "resource/student.csv";
         font1 = new Font(Font.SANS_SERIF, Font.PLAIN, 16);
         font2 = new Font(Font.MONOSPACED, Font.PLAIN, 24);
         font3 = new Font(Font.MONOSPACED, Font.PLAIN, 28);
@@ -46,7 +50,7 @@ public class GradeSystem extends JFrame implements ActionListener {
         int y = (screenSize.height - HEIGHT) / 2;
 
         setBounds(x, y, WIDTH, HEIGHT);
-        setTitle("學生成績輸入系統");
+        setTitle(TITLE);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // JFrame布局樣式
         setLayout(null);
@@ -104,7 +108,13 @@ public class GradeSystem extends JFrame implements ActionListener {
         outputArea = new JTextArea();
         outputArea.setBounds(10, 20, (int) (WIDTH * 0.52), HEIGHT - 150);
         outputArea.setFont(font4);
-        panel.add(outputArea);
+
+        JScrollPane scrollPane = new JScrollPane(outputArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        scrollPane.setBounds(10, 20, (int) (WIDTH * 0.52), HEIGHT - 150);
+
+        panel.add(scrollPane);
 
         panel = new JPanel();
         panel.setBounds(10 + (int) (WIDTH * 0.4), HEIGHT - 100, (int) (WIDTH * 0.55), 80);
@@ -161,7 +171,7 @@ public class GradeSystem extends JFrame implements ActionListener {
         }
     }
 
-    private void load() {
+    private void open() {
         FileDialog fd = new FileDialog(this, "選擇檔案", FileDialog.LOAD);
         fd.setDirectory("");
         fd.setFile("*.csv");
@@ -171,9 +181,59 @@ public class GradeSystem extends JFrame implements ActionListener {
         if (filename == null) {
             JOptionPane.showMessageDialog(null, "讀取檔案失敗!");
         } else {
-            String path = fd.getDirectory() + fd.getFile();
+            fileName = fd.getDirectory() + fd.getFile();
+            this.setTitle(TITLE + " 編修檔案:" + fd.getFile());
+            load(fileName);
+        }
+    }
+
+    private void load(String filename) {
+        File file = new File(filename);
+        FileReader fileReader = null;
+        BufferedReader br = null;
+
+        if (file.exists()) {
+            try {
+
+                fileReader = new FileReader(filename);
+                br = new BufferedReader(fileReader);
+                String line;
+                StringBuilder sb = new StringBuilder();
+                int count = 0;
+                while ((line = br.readLine()) != null) {
+                    if (++count == 1) {
+                        continue;
+                    }
+                    sb.append(line).append("\n");
+                }
+
+                outputArea.setText(sb.toString());
+
+            } catch (FileNotFoundException e) {
+                System.out.println(e);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "檔案讀取失敗!");
+
+            } finally {
+                if (br != null) {
+                    try {
+                        br.close();
+                    } catch (IOException e) {
+                        System.out.println(e);
+                    }
+                }
+
+                if (fileReader != null) {
+                    try {
+                        fileReader.close();
+                    } catch (IOException e) {
+                        System.out.println(e);
+                    }
+                }
+            }
 
         }
+
     }
 
     // 儲存檔案
@@ -212,12 +272,17 @@ public class GradeSystem extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == loadBtn) {
-            load();
-
+            open();
             return;
         }
 
         if (e.getSource() == saveBtn) {
+            if (fileName == null) {
+                JOptionPane.showMessageDialog(null, "請先開啟檔案!");
+
+                return;
+            }
+
             String text = outputArea.getText();
             if (text.equals("")) {
                 JOptionPane.showMessageDialog(null, "目前資料為空，請先輸入資料!");
