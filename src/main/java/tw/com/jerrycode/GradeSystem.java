@@ -3,6 +3,8 @@ package tw.com.jerrycode;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class GradeSystem extends JFrame implements ActionListener {
 
@@ -25,7 +27,10 @@ public class GradeSystem extends JFrame implements ActionListener {
     private final int WIDTH = 600;
     private final int HEIGHT = 550;
 
+    private String fileName;
+
     GradeSystem() {
+        fileName = "student.csv";
         font1 = new Font(Font.SANS_SERIF, Font.PLAIN, 16);
         font2 = new Font(Font.MONOSPACED, Font.PLAIN, 24);
         font3 = new Font(Font.MONOSPACED, Font.PLAIN, 28);
@@ -155,12 +160,46 @@ public class GradeSystem extends JFrame implements ActionListener {
         }
     }
 
+    // 儲存檔案
+    private void save(String filename, String text, boolean append) {
+        FileWriter fileWriter = null;
+
+        try {
+            fileWriter = new FileWriter(filename, append);
+            fileWriter.write(text);
+            JOptionPane.showMessageDialog(null, "寫入資料成功!");
+        } catch (IOException e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "寫入資料失敗!");
+        } finally {
+            if (fileWriter != null) {
+                try {
+                    fileWriter.close();
+                } catch (IOException e) {
+                    System.out.println(e);
+                }
+            }
+        }
+    }
+
     public void run(boolean visible) {
         setVisible(visible);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == saveBtn) {
+            String text = outputArea.getText();
+            if (text.equals("")) {
+                JOptionPane.showMessageDialog(null, "目前資料為空，請先輸入資料!");
+                return;
+            }
+
+            save(fileName, text, true);
+
+            return;
+        }
+
         if (e.getSource() == clearBtn) {
             int dialogResult = JOptionPane.showConfirmDialog(null, "確定清除所有內容?",
                     "警告", JOptionPane.YES_NO_OPTION);
